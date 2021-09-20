@@ -1,0 +1,7 @@
+﻿[*.cs]
+
+# IDE0024: Использовать тело блока для операторов
+csharp_style_expression_bodied_operators = false:silent
+
+# CS0659: Тип переопределяет Object.Equals(object o), но не переопределяет Object.GetHashCode()
+dotnet_diagnostic.CS0659.severity = none
