@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Assets.Scripts.GameOptions;
+using static Assets.Scripts.AudioManager;
 
 namespace Assets.Scripts
 {
@@ -17,6 +19,10 @@ namespace Assets.Scripts
         [SerializeField]
         protected int numberOfArrays = 0;
         protected int totalNumberOfArrays = 0;
+
+        [SerializeField]
+        private AudioClip m_PushSound = null;
+
         public List<SwipeView> swipeViews { get; set; } = null;
         protected List<ViewResources> viewResources = null;
         public List<ViewResources> Resources
@@ -48,8 +54,16 @@ namespace Assets.Scripts
             viewResources = new List<ViewResources>();
             positionList = new List<Vector2>();
 
+            initPositions();
+        }
+
+        private void initPositions()
+        {
+            positionList.Clear();
             for (byte i = 0; i < totalNumberOfArrays; i++)
                 positionList.Add(new Vector2(i % numberOfArrays, i / numberOfArrays));
+
+            emptyPosition = positionList[positionList.Count - 1];
         }
 
         public void setNumberOfArrays(int numberOfArrays, List<ViewResources> viewResources)
@@ -124,10 +138,12 @@ namespace Assets.Scripts
             if (permissionToSwipe &&
                     position.y == emptyPosition.y &&
                     position.x != 0 &&
-                    (emptyPosition.x + GameOptions.DISTANCE_OF_SWIPING) >= position.x)
+                    (emptyPosition.x + DISTANCE_OF_SWIPING) >= position.x)
             {
 
                 if (!((emptyPosition.x + 1) <= position.x)) return false;
+
+                playSound(m_PushSound);
 
                 for (int i = (int)(emptyPosition.x + 1); i <= position.x; i++)
                     switchingPosition(new Vector2(i, position.y));
@@ -141,10 +157,12 @@ namespace Assets.Scripts
             if (permissionToSwipe &&
                     position.y == emptyPosition.y &&
                     position.x != (numberOfArrays - 1) &&
-                    (emptyPosition.x - GameOptions.DISTANCE_OF_SWIPING) <= position.x)
+                    (emptyPosition.x - DISTANCE_OF_SWIPING) <= position.x)
             {
 
                 if (!((emptyPosition.x - 1) >= position.x)) return false;
+
+                playSound(m_PushSound);
 
                 for (int i = (int)(emptyPosition.x - 1); i >= position.x; i--)
                     switchingPosition(new Vector2(i, position.y));
@@ -158,10 +176,12 @@ namespace Assets.Scripts
             if (permissionToSwipe &&
                     position.x == emptyPosition.x &&
                     position.y != 0 &&
-                    (emptyPosition.y + GameOptions.DISTANCE_OF_SWIPING) >= position.y)
+                    (emptyPosition.y + DISTANCE_OF_SWIPING) >= position.y)
             {
 
                 if (!((emptyPosition.y + 1) <= position.y)) return false;
+
+                playSound(m_PushSound);
 
                 for (int i = (int)(emptyPosition.y + 1); i <= position.y; i++)
                     switchingPosition(new Vector2(position.x, i));
@@ -175,10 +195,12 @@ namespace Assets.Scripts
             if (permissionToSwipe &&
                     position.x == emptyPosition.x &&
                     position.y != (numberOfArrays - 1) &&
-                    (emptyPosition.y - GameOptions.DISTANCE_OF_SWIPING) <= position.y)
+                    (emptyPosition.y - DISTANCE_OF_SWIPING) <= position.y)
             {
 
                 if (!((emptyPosition.y - 1) >= position.y)) return false;
+
+                playSound(m_PushSound);
 
                 for (int i = (int)(emptyPosition.y - 1); i >= position.y; i--)
                     switchingPosition(new Vector2(position.x, i));
@@ -195,59 +217,9 @@ namespace Assets.Scripts
             {
                 swipeView.swiping(emptyPosition);
                 emptyPosition = new Vector2(position.x, position.y);
+
+                if (checkTheWin()) toWin();
             }
-
-            if (checkTheWin()) toWin();
-        }
-
-        private SwipeView getSwipeView(Vector2 position) => swipeViews.FirstOrDefault(view => view.positionInTheArray == position);
-
-        protected void shuffle()
-        {
-            for (var i = positionList.Count - 1; i > 0; i--)
-            {
-                var randomIndex = UnityEngine.Random.Range(0, i + 1); //maxValue (i + 1) is EXCLUSIVE
-                Swap(positionList, i, randomIndex);
-            }
-            emptyPosition = positionList[positionList.Count - 1];
-        }
-
-        private void Swap(List<Vector2> list, int indexA, int indexB)
-        {
-            var temp = list[indexA];
-            list[indexA] = list[indexB];
-            list[indexB] = temp;
-        }
-
-        protected void startShuffle()
-        {
-            shuffle();
-
-            for (int i = 0; i < (totalNumberOfArrays - 1); i++)
-            {
-                SwipeView view = swipeViews[i];
-                Vector2 newPosition = (positionList[i] - view.positionInTheArray) * anchorOfView;
-                ViewResources resource = viewResources[i % numberOfArrays];
-
-                view.startTranslateAnimation(newPosition.x, newPosition.y, GameOptions.BUTTON_SHUFFLE_ANIM_DURATION);
-                view.Resources.Text = resource.Id.ToString();
-                view.positionInTheArray = positionList[i];
-                view.Resources = resource;
-            }
-
-            StartCoroutine(endAnim(6.4f));
-        }
-
-        public IEnumerator endAnim(float second)
-        {
-            yield return new WaitForSeconds(second);
-            AnimEnd();
-        }
-
-        protected void AnimEnd()
-        {
-            if(gameOver != null)
-                gameOver.onRestartIsComplete(playerName);
         }
 
         protected void toWin()
@@ -272,22 +244,79 @@ namespace Assets.Scripts
             return true;
         }
 
+        private SwipeView getSwipeView(Vector2 position) => swipeViews.FirstOrDefault(view => view.positionInTheArray == position);
+
+        protected void shuffle()
+        {
+            for (var i = positionList.Count - 1; i > 0; i--)
+            {
+                var randomIndex = UnityEngine.Random.Range(0, i + 1);
+                Swap(positionList, i, randomIndex);
+            }
+            emptyPosition = positionList[positionList.Count - 1];
+        }
+
+        private void Swap(List<Vector2> list, int indexA, int indexB)
+        {
+            var temp = list[indexA];
+            list[indexA] = list[indexB];
+            list[indexB] = temp;
+        }
+
+        protected void startShuffle()
+        {
+            shuffle();
+
+            for (int i = 0; i < (totalNumberOfArrays - 1); i++)
+            {
+                SwipeView view = swipeViews[i];
+                Vector2 newPosition = (positionList[i] - view.positionInTheArray) * anchorOfView;
+                ViewResources resource = viewResources[i % numberOfArrays];
+
+                view.startTranslateAnimation(newPosition.x, newPosition.y, BUTTON_SHUFFLE_ANIM_DURATION);
+                view.Resources.Text = resource.Id.ToString();
+                view.positionInTheArray = positionList[i];
+            }
+        }
+
         public void pauseGame() => permissionToSwipe = false;
 
         public void playGame() => permissionToSwipe = true;
 
-        public void startGame(List<ViewResources> viewResources) => start(viewResources);
+        public void returnToStartingPosition()
+        {
+            initPositions();
 
-        public void startGame() => start(viewResources);
+            int i = 0;
+            foreach(SwipeView view in swipeViews)
+            {
+                Vector2 newPosition = (positionList[i] - view.positionInTheArray) * anchorOfView;
+                view.startTranslateAnimation(newPosition.x, newPosition.y, GameOptions.BUTTON_SHUFFLE_ANIM_DURATION);
+                view.positionInTheArray = positionList[i++];
+            }
+        }
 
-        protected void start(List<ViewResources> viewResources)
+        public void startGame(List<ViewResources> viewResources)
         {
             if (!permissionToSwipe)
             {
                 Resources = viewResources;
-                startShuffle();
-                playGame();
+                start();
             }
+        }
+
+        public void startGame()
+        {
+            if (!permissionToSwipe)
+            {
+                start();
+            }
+        }
+
+        protected void start()
+        {
+            startShuffle();
+            playGame();
         }
 
         public void notifyViews()
@@ -304,11 +333,15 @@ namespace Assets.Scripts
                 Destroy(swipeViews[i]);
         }
 
+        private void playSound(AudioClip clip)
+        {
+            if (clip != null)
+                GetAudioManager.play(clip);
+        }
+
         public interface GameOver
         {
             void gameOver(string playerName);
-
-            void onRestartIsComplete(string playerName);
         }
     }
 }

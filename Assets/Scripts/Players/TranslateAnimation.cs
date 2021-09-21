@@ -24,7 +24,7 @@ namespace Assets.Scripts
             animationListener = new List<AnimationListener>();
         }
 
-        private void Start()
+        private void Awake()
         {
             myView = GetComponent<RectTransform>();
         }
@@ -78,10 +78,6 @@ namespace Assets.Scripts
 
             myView.anchorMin = newMin;
             myView.anchorMax = newMax;
-
-            //Vector2 newValue = myView.anchoredPosition + toDelta / duration;
-
-            //myView.anchoredPosition = newValue;
         }
     }
 

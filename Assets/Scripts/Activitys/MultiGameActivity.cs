@@ -6,12 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+
 using static Assets.Scripts.GameBoard;
 using static Assets.Scripts.ActivityManager;
+using static Assets.Scripts.PauseMenu;
+using static Assets.Scripts.AudioManager;
+using static Assets.Scripts.GameOptions;
 
 namespace Assets.Scripts.Activitys
 {
-    class MultiGameActivity : Activity, GameOver
+    class MultiGameActivity : Activity, GameOver, IOnPauseActions
     {
 
         [SerializeField]
@@ -26,6 +30,13 @@ namespace Assets.Scripts.Activitys
         public GameBoard m_Player2 = null;
         public DirectoryBoard m_Directory2 = null;
 
+        public PauseMenu m_PauseMenu = null;
+
+        [SerializeField]
+        private AudioClip m_PauseBtnSound = null;
+
+        private bool isRestarting = false;
+
         private void Start()
         {
             loadData();
@@ -34,40 +45,95 @@ namespace Assets.Scripts.Activitys
         private void loadData()
         {
 
-            m_Directory1.setNumberOfArrays(GameOptions.NUMBER_OF_ARRAYS, new List<ViewResources>(GameOptions.COLLECTION_OF_SWIPE_VIEW_RESOURCES));
+            m_Directory1.setNumberOfArrays(NUMBER_OF_ARRAYS, new List<ViewResources>(COLLECTION_OF_SWIPE_VIEW_RESOURCES));
             m_Player1.setNumberOfArrays(m_Directory1.viewResources.Count, m_Directory1.viewResources);
             m_Player1.gameOver = this;
             m_Player1.PlayerName = "Player1";
 
-            m_Directory2.setNumberOfArrays(GameOptions.NUMBER_OF_ARRAYS, new List<ViewResources>(GameOptions.COLLECTION_OF_SWIPE_VIEW_RESOURCES));
+            m_Directory2.setNumberOfArrays(NUMBER_OF_ARRAYS, new List<ViewResources>(COLLECTION_OF_SWIPE_VIEW_RESOURCES));
             m_Player2.setNumberOfArrays(m_Directory2.viewResources.Count, m_Directory2.viewResources);
             m_Player2.gameOver = this;
             m_Player2.PlayerName = "Player2";
+
+            m_PauseMenu.m_PauseActions = this;
+            m_PauseMenu.PauseGame = false;
+            m_PauseMenu.StartGame();
         }
 
         public void startGame()
         {
-            m_Directory1.start();
-            m_Directory2.start();
-            m_Player1.startGame(m_Directory1.viewResources);
-            m_Player2.startGame(m_Directory2.viewResources);
+            if (isRestarting)
+            {
+                isRestarting = false;
+
+                m_Player1.startGame();
+                m_Player2.startGame();
+            }
+            else
+            {
+                m_Directory1.startShuffle();
+                m_Directory2.startShuffle();
+
+                m_Player1.startGame(m_Directory1.viewResources);
+                m_Player2.startGame(m_Directory2.viewResources);
+            }
 
             print("StartGame");
         }
 
         public void gameOver(string playerName)
         {
-            m_Directory1.GameOver = true;
-            m_Directory2.GameOver = true;
-            m_Player1.pauseGame();
-            m_Player2.pauseGame();
+            m_PauseMenu.setText("The Winner Is " + playerName);
+            m_PauseMenu.GameOver = true;
+            m_PauseMenu.PauseGame = true;
 
             print(playerName);
         }
 
-        public void onRestartIsComplete(string playerName)
+        public void pauseGame()
         {
+            playPauseBtnSound();
 
+            m_PauseMenu.setText("The Game Isn't Over");
+            m_PauseMenu.PauseGame = true;
+
+            m_Player1.pauseGame();
+            m_Player2.pauseGame();
+        }
+
+        public void resumeGame()
+        {
+            if (!m_PauseMenu.GameOver)
+            {
+                m_Player1.playGame();
+                m_Player2.playGame();
+            }
+        }
+
+        public void restartGame()
+        {
+            m_Directory1.startShuffle();
+            m_Directory2.startShuffle();
+
+            m_Player1.Resources = m_Directory1.viewResources;
+            m_Player1.returnToStartingPosition();
+
+            m_Player2.Resources = m_Directory2.viewResources;
+            m_Player2.returnToStartingPosition();
+
+            isRestarting = true;
+        }
+
+        public void nextGame() { }
+
+        public void closeGame()
+        {
+            OnBackPressed();
+        }
+
+        public void counterCounted()
+        {
+            startGame();
         }
 
         public override void OnBackPressed()
@@ -94,6 +160,12 @@ namespace Assets.Scripts.Activitys
         public override void pauseActivity()
         {
             finish();
+        }
+
+        private void playPauseBtnSound()
+        {
+            if (m_PauseBtnSound != null)
+                GetAudioManager.play(m_PauseBtnSound);
         }
     }
 }

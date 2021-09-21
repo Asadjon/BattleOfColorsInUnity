@@ -44,9 +44,9 @@ namespace Assets.Scripts
 
         public TranslateAnimation Animation { get; set; } = null;
 
-        private void Start()
+        private void Awake()
         {
-            if(Resources != null)
+            if (Resources != null)
                 Resources.set(textView.text, colorView.color, imageView.sprite);
 
             EventTrigger eventTrigger = GetComponent<EventTrigger>();
@@ -69,9 +69,12 @@ namespace Assets.Scripts
                 eventTrigger.triggers.Add(up);
                 eventTrigger.triggers.Add(move);
             }
-
             Animation = GetComponent<TranslateAnimation>();
             Animation.animationListener.Add(this);
+        }
+
+        private void Start()
+        {
         }
 
         public SwipeView()

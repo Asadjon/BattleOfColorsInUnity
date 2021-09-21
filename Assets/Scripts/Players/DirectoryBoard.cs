@@ -26,7 +26,6 @@ namespace Assets.Scripts.Players
             notifyViews();
         }
 
-        public bool GameOver { get; set; } = false;
         private bool showBitmaps, showTexts;
         private float anchorOfView;
 
@@ -112,23 +111,19 @@ namespace Assets.Scripts.Players
             list[indexB] = temp;
         }
 
-        public void start()
+        public void startShuffle()
         {
-            if (GameOver)
+            shuffle();
+
+            for (int i = 0; i < numberOfArrays; i++)
             {
-                shuffle();
+                ViewResources resource = viewResources[i];
+                SwipeView view = mWorkViews.FirstOrDefault(v => v.Resources.Equals(resource));
+                float move = (i - view.positionInTheArray.x) * anchorOfView;
 
-                for (int i = 0; i < numberOfArrays; i++)
-                {
-                    ViewResources resource = viewResources[i];
-                    SwipeView view = mWorkViews.FirstOrDefault(v => v.Resources.Equals(resource));
-                    float move = (i - view.positionInTheArray.x) * anchorOfView;
+                view.positionInTheArray = new Vector2(i, 0);
 
-                    view.positionInTheArray = new Vector2(i, 0);
-
-                    view.startTranslateAnimation(move, 0, GameOptions.BUTTON_SHUFFLE_ANIM_DURATION);
-                }
-                GameOver = false;
+                view.startTranslateAnimation(move, 0, GameOptions.BUTTON_SHUFFLE_ANIM_DURATION);
             }
         }
 

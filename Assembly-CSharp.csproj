@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Activitys\MenuActivity.cs" />
     <Compile Include="Assets\Scripts\Activitys\MultiGameActivity.cs" />
     <Compile Include="Assets\Scripts\AudioManager.cs" />
+    <Compile Include="Assets\Scripts\CheckerButtonEnable.cs" />
     <Compile Include="Assets\Scripts\GameOptions.cs" />
     <Compile Include="Assets\Scripts\Interface\IOnChangeResources.cs" />
     <Compile Include="Assets\Scripts\Interface\IOnClickListener.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Assets\Scripts\Interface\SceneAction.cs" />
     <Compile Include="Assets\Scripts\MainClass.cs" />
     <Compile Include="Assets\Scripts\MyCustomEventTrigger.cs" />
+    <Compile Include="Assets\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\Players\DirectoryBoard.cs" />
     <Compile Include="Assets\Scripts\Players\GameBoard.cs" />
     <Compile Include="Assets\Scripts\Players\SwipeView.cs" />

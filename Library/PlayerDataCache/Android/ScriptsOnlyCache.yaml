@@ -2,10 +2,12 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - Assets.Scripts.Activitys.MultiGameActivity
+    - Assets.Scripts.CheckerButtonEnable
     - Assets.Scripts.GameBoard
     - Assets.Scripts.MainClass
     - Assets.Scripts.MenuActivity
     - Assets.Scripts.MyCustomEventTrigger
+    - Assets.Scripts.PauseMenu
     - Assets.Scripts.Players.DirectoryBoard
     - Assets.Scripts.SwipeView
     - Assets.Scripts.Test
@@ -74,11 +76,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10926}
     - Class: 114
-      Script: {instanceID: 11348}
-    - Class: 114
-      Script: {instanceID: 13042}
-    - Class: 114
-      Script: {instanceID: 13044}
+      Script: {instanceID: 11352}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -115,15 +113,15 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10690}
     - Class: 114
-      Script: {instanceID: 11090}
+      Script: {instanceID: 11092}
     - Class: 114
-      Script: {instanceID: 11176}
+      Script: {instanceID: 11178}
     - Class: 114
-      Script: {instanceID: 11210}
+      Script: {instanceID: 11212}
     - Class: 114
-      Script: {instanceID: 11286}
+      Script: {instanceID: 11290}
     - Class: 114
-      Script: {instanceID: 11554}
+      Script: {instanceID: 11558}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -157,6 +155,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
     - Class: 91
       Script: {instanceID: 0}
     - Class: 95
@@ -182,17 +182,21 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10986}
     - Class: 114
-      Script: {instanceID: 11090}
+      Script: {instanceID: 11022}
     - Class: 114
-      Script: {instanceID: 11110}
+      Script: {instanceID: 11092}
     - Class: 114
-      Script: {instanceID: 11128}
+      Script: {instanceID: 11112}
     - Class: 114
-      Script: {instanceID: 11176}
+      Script: {instanceID: 11130}
     - Class: 114
-      Script: {instanceID: 11520}
+      Script: {instanceID: 11178}
     - Class: 114
-      Script: {instanceID: 11554}
+      Script: {instanceID: 11286}
+    - Class: 114
+      Script: {instanceID: 11524}
+    - Class: 114
+      Script: {instanceID: 11558}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -239,11 +243,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10690}
     - Class: 114
-      Script: {instanceID: 11176}
+      Script: {instanceID: 11178}
     - Class: 114
-      Script: {instanceID: 11386}
+      Script: {instanceID: 11390}
     - Class: 114
-      Script: {instanceID: 11554}
+      Script: {instanceID: 11558}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -291,7 +295,7 @@ ScriptsOnlyBuild:
     className: TMP_ScrollbarEventHandler
   - hash:
       serializedVersion: 2
-      Hash: 826c2ff162aa2aa80b7c0145a6c39656
+      Hash: ff41a25c5e2e1dd092a20ca4765eca4b
     assemblyName: Assembly-CSharp.dll
     namespaceName: Assets.Scripts
     className: GameBoard
@@ -435,7 +439,7 @@ ScriptsOnlyBuild:
     className: Shadow
   - hash:
       serializedVersion: 2
-      Hash: 5dccf0a5d038598253f028c6525814b7
+      Hash: ea171d58778590bb1ffc981135c85506
     assemblyName: Assembly-CSharp.dll
     namespaceName: Assets.Scripts.Activitys
     className: MultiGameActivity
@@ -579,6 +583,12 @@ ScriptsOnlyBuild:
     className: TimelineAsset
   - hash:
       serializedVersion: 2
+      Hash: 265369b9842580006397139beefdf924
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: Assets.Scripts
+    className: CheckerButtonEnable
+  - hash:
+      serializedVersion: 2
       Hash: 7b116bab1b282825e21ec7d6a025df19
     assemblyName: Assembly-CSharp.dll
     namespaceName: Assets.Scripts
@@ -619,6 +629,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: Assets.Scripts
     className: MyCustomEventTrigger
+  - hash:
+      serializedVersion: 2
+      Hash: 02677ea8b238bbc167f7f05a0a274239
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: Assets.Scripts
+    className: PauseMenu
   - hash:
       serializedVersion: 2
       Hash: ce9d1171f9d24dc878741cc2205f0a22
