@@ -70,15 +70,10 @@ namespace Assets.Scripts
         {
             this.numberOfArrays = numberOfArrays;
             totalNumberOfArrays = (int) Math.Pow(this.numberOfArrays, 2);
-
-            CalculateSize();
-
             this.viewResources = viewResources;
 
-            positionList.Clear();
-            for (byte i = 0; i < totalNumberOfArrays; i++)
-                positionList.Add(new Vector2(i % numberOfArrays, i / numberOfArrays));
-
+            CalculateSize();
+            initPositions();
             notifyViews();
         }
 
@@ -138,7 +133,7 @@ namespace Assets.Scripts
             if (permissionToSwipe &&
                     position.y == emptyPosition.y &&
                     position.x != 0 &&
-                    (emptyPosition.x + DISTANCE_OF_SWIPING) >= position.x)
+                    (emptyPosition.x + Instance.distanceOfSwiping) >= position.x)
             {
 
                 if (!((emptyPosition.x + 1) <= position.x)) return false;
@@ -157,7 +152,7 @@ namespace Assets.Scripts
             if (permissionToSwipe &&
                     position.y == emptyPosition.y &&
                     position.x != (numberOfArrays - 1) &&
-                    (emptyPosition.x - DISTANCE_OF_SWIPING) <= position.x)
+                    (emptyPosition.x - Instance.distanceOfSwiping) <= position.x)
             {
 
                 if (!((emptyPosition.x - 1) >= position.x)) return false;
@@ -176,7 +171,7 @@ namespace Assets.Scripts
             if (permissionToSwipe &&
                     position.x == emptyPosition.x &&
                     position.y != 0 &&
-                    (emptyPosition.y + DISTANCE_OF_SWIPING) >= position.y)
+                    (emptyPosition.y + Instance.distanceOfSwiping) >= position.y)
             {
 
                 if (!((emptyPosition.y + 1) <= position.y)) return false;
@@ -195,7 +190,7 @@ namespace Assets.Scripts
             if (permissionToSwipe &&
                     position.x == emptyPosition.x &&
                     position.y != (numberOfArrays - 1) &&
-                    (emptyPosition.y - DISTANCE_OF_SWIPING) <= position.y)
+                    (emptyPosition.y - Instance.distanceOfSwiping) <= position.y)
             {
 
                 if (!((emptyPosition.y - 1) >= position.y)) return false;
@@ -273,7 +268,7 @@ namespace Assets.Scripts
                 Vector2 newPosition = (positionList[i] - view.positionInTheArray) * anchorOfView;
                 ViewResources resource = viewResources[i % numberOfArrays];
 
-                view.startTranslateAnimation(newPosition.x, newPosition.y, BUTTON_SHUFFLE_ANIM_DURATION);
+                view.startTranslateAnimation(newPosition.x, newPosition.y, Instance.shuffleAnimDuration);
                 view.Resources.Text = resource.Id.ToString();
                 view.positionInTheArray = positionList[i];
             }
@@ -291,7 +286,7 @@ namespace Assets.Scripts
             foreach(SwipeView view in swipeViews)
             {
                 Vector2 newPosition = (positionList[i] - view.positionInTheArray) * anchorOfView;
-                view.startTranslateAnimation(newPosition.x, newPosition.y, GameOptions.BUTTON_SHUFFLE_ANIM_DURATION);
+                view.startTranslateAnimation(newPosition.x, newPosition.y, Instance.shuffleAnimDuration);
                 view.positionInTheArray = positionList[i++];
             }
         }

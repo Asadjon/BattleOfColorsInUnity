@@ -7,7 +7,7 @@ namespace Assets.Scripts
     {
         private RectTransform myView;
 
-        public List<AnimationListener> animationListener { get; set; }
+        public List<AnimationListener> animationListener { get; set; } = new List<AnimationListener>();
 
         private Vector2 fromDelta;
 
@@ -18,11 +18,6 @@ namespace Assets.Scripts
         public bool isRunning { get; private set; } = false;
 
         private int millisLeft;
-
-        public TranslateAnimation()
-        {
-            animationListener = new List<AnimationListener>();
-        }
 
         private void Awake()
         {

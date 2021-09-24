@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static Assets.Scripts.GameOptions;
 
 namespace Assets.Scripts.Players
 {
@@ -36,13 +37,13 @@ namespace Assets.Scripts.Players
         private void loadData()
         {
             mWorkViews = new List<SwipeView>();
-            viewResources = GameOptions.COLLECTION_OF_SWIPE_VIEW_RESOURCES;
+            viewResources = Instance.selectedResource.m_Resources;
 
-            numberOfArrays = GameOptions.NUMBER_OF_ARRAYS;
+            numberOfArrays = Instance.numberOfArrays;
             mWorkViews = new List<SwipeView>();
 
-            showBitmaps = GameOptions.VIEWS_SHOW_BITMAP;
-            showTexts = GameOptions.VIEWS_SHOW_TEXT;
+            showBitmaps = Instance.viewsShowImage;
+            showTexts = Instance.viewsShowText;
         }
 
         private void CalculateSize()
@@ -118,12 +119,12 @@ namespace Assets.Scripts.Players
             for (int i = 0; i < numberOfArrays; i++)
             {
                 ViewResources resource = viewResources[i];
-                SwipeView view = mWorkViews.FirstOrDefault(v => v.Resources.Equals(resource));
+                 SwipeView view = mWorkViews.FirstOrDefault(v => v.Resources.Equals(resource));
                 float move = (i - view.positionInTheArray.x) * anchorOfView;
 
                 view.positionInTheArray = new Vector2(i, 0);
 
-                view.startTranslateAnimation(move, 0, GameOptions.BUTTON_SHUFFLE_ANIM_DURATION);
+                view.startTranslateAnimation(move, 0, Instance.shuffleAnimDuration);
             }
         }
 

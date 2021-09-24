@@ -7,68 +7,59 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public class GameOptions
+    public class GameOptions : MonoBehaviour
     {
-        public static float SWIPE_LIMIT_RECT = 4f;
+        #region Singltone
+        public static GameOptions Instance;
 
-        public static float SWIPING_SPEED = .05f;
-
-        public static byte NUMBER_OF_ARRAYS;
-
-        public static int DEFAULT_NUMBER_OF_ARRAYS { get; } = 3;
-
-        public static byte MIN_NUMBER_OF_ARRAYS { get; } = 2;
-
-        public static byte MAX_NUMBER_OF_ARRAYS { get; } = 8;
-
-        public static List<ViewResources> SELECTED_RESOURCE;
-
-        public static float BUTTON_SHUFFLE_ANIM_DURATION { get; } = .2f;
-
-        public static int DEFAULT_SMART_SPEED { get; } = 500;
-
-        public static short SMART_SPEED = 1000;
-
-        public static long TIME_FOR_THE_GAME = 10000;
-
-        public static bool VIEWS_SHOW_TEXT = false;
-
-        public static bool VIEWS_SHOW_BITMAP = true;
-
-        public static int DISTANCE_OF_SWIPING = 8;
-
-        public static List<int> unit_of_time { get; } = new List<int> { 10, 45, 115, 250, 410, 720, 1130 };
-
-        public static List<List<int>> COLLECTION_OF_BITMAPS_ID { get; } = new List<List<int>>();
-
-        public static List<List<Color>> COLLECTION_OF_COLORS { get; } = new List<List<Color>>();
-
-        public static List<ViewResources> COLLECTION_OF_SWIPE_VIEW_RESOURCES = new List<ViewResources>();
-
-        public static void init()
+        private void Awake()
         {
-            for(int i = 0; i < 10; i++)
+            if (Instance == null)
             {
-                List<Color> colors = new List<Color>();
-
-                for (int j = 0; j < MAX_NUMBER_OF_ARRAYS; j++)
-                    colors.Add(UnityEngine.Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f));
-
-                COLLECTION_OF_COLORS.Add(colors);
+                init();
+                Instance = this;
             }
-
-            int r = UnityEngine.Random.Range(0, 10);
-            for (int i = 0; i < NUMBER_OF_ARRAYS; i++)
-            {
-                COLLECTION_OF_SWIPE_VIEW_RESOURCES.Add(new ViewResources()
-                {
-                    Id = i,
-                    Text = i.ToString(),
-                    Color = COLLECTION_OF_COLORS[r][i],
-                    Image = null
-                });
-
-            }
+            else
+                Debug.Log("More than on instance GameOptions found!");
         }
+        #endregion
+
+        public float swipeLimitRect = 4f;
+
+        public float swipingSpeed = .05f;
+
+        [Range(2, 8)]
+        public int numberOfArrays = 3;
+
+        public int defaultNumberOfArrays = 3;
+
+        public byte minNumberOfArrays { get; } = 2;
+
+        public byte maxNumberOfArrays { get; } = 8;
+
+        public Resource.Resources selectedResource = null;
+
+        public float shuffleAnimDuration = .2f;
+
+        public int defaultSmartSpeed { get; } = 500;
+
+        public short smartSpeed = 1000;
+
+        public long timeForTheGame { get; } = 10000;    
+
+        public bool viewsShowText = false;
+
+        public bool viewsShowImage = true;
+
+        [Range(1, 8)]
+        public int distanceOfSwiping = 8;
+        public List<int> unit_of_time { get; } = new List<int> { 10, 45, 115, 250, 410, 720, 1130 };
+
+        public List<Resource.Resources> collactionOfResource = null;
+
+        private void init()
+        {
+        }
+
     }
 }

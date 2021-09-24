@@ -68,10 +68,10 @@
     <Compile Include="Assets\Scripts\Activitys\Activity.cs" />
     <Compile Include="Assets\Scripts\Activitys\MenuActivity.cs" />
     <Compile Include="Assets\Scripts\Activitys\MultiGameActivity.cs" />
+    <Compile Include="Assets\Scripts\Activitys\OptionsActivity.cs" />
     <Compile Include="Assets\Scripts\AudioManager.cs" />
     <Compile Include="Assets\Scripts\CheckerButtonEnable.cs" />
     <Compile Include="Assets\Scripts\GameOptions.cs" />
-    <Compile Include="Assets\Scripts\Interface\IOnChangeResources.cs" />
     <Compile Include="Assets\Scripts\Interface\IOnClickListener.cs" />
     <Compile Include="Assets\Scripts\Interface\IOnEventTrigger.cs" />
     <Compile Include="Assets\Scripts\Interface\SceneAction.cs" />
@@ -83,8 +83,10 @@
     <Compile Include="Assets\Scripts\Players\SwipeView.cs" />
     <Compile Include="Assets\Scripts\Players\TranslateAnimation.cs" />
     <Compile Include="Assets\Scripts\Players\ViewResources.cs" />
+    <Compile Include="Assets\Scripts\Resource\Resources.cs" />
     <Compile Include="Assets\Scripts\Test.cs" />
     <Compile Include="Assets\Scripts\Transition.cs" />
+    <Compile Include="Assets\Scripts\UI\NumberPicker.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />

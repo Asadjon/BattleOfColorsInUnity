@@ -55,7 +55,7 @@ namespace Assets.Scripts
 
             } else if (button.Equals(m_BtnMulti))
             {
-                m_NextSceneIndex = ActivitesID.GetId(typeof(MultiGameActivity));
+                m_NextSceneIndex = ActivitesID.GetId(typeof(OptionsActivity));
 
             } else if (button.Equals(m_BtnOptions))
             {

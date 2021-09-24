@@ -13,9 +13,6 @@ namespace Assets.Scripts
 
         private void Awake()
         {
-            GameOptions.init();
-            GameOptions.NUMBER_OF_ARRAYS = 8;
-
             ActivityManager.NewInstanse();
 
             AudioManager.NewInstance(m_AudioSource);

@@ -44,14 +44,15 @@ namespace Assets.Scripts.Activitys
 
         private void loadData()
         {
+            List<ViewResources> resources = Instance.selectedResource.m_Resources.GetRange(0, Instance.numberOfArrays);
 
-            m_Directory1.setNumberOfArrays(NUMBER_OF_ARRAYS, new List<ViewResources>(COLLECTION_OF_SWIPE_VIEW_RESOURCES));
-            m_Player1.setNumberOfArrays(m_Directory1.viewResources.Count, m_Directory1.viewResources);
+            m_Directory1.setNumberOfArrays(Instance.numberOfArrays, new List<ViewResources>(resources));
+            m_Player1.setNumberOfArrays(Instance.numberOfArrays, m_Directory1.viewResources);
             m_Player1.gameOver = this;
             m_Player1.PlayerName = "Player1";
 
-            m_Directory2.setNumberOfArrays(NUMBER_OF_ARRAYS, new List<ViewResources>(COLLECTION_OF_SWIPE_VIEW_RESOURCES));
-            m_Player2.setNumberOfArrays(m_Directory2.viewResources.Count, m_Directory2.viewResources);
+            m_Directory2.setNumberOfArrays(Instance.numberOfArrays, new List<ViewResources>(resources));
+            m_Player2.setNumberOfArrays(Instance.numberOfArrays, m_Directory2.viewResources);
             m_Player2.gameOver = this;
             m_Player2.PlayerName = "Player2";
 
@@ -138,23 +139,14 @@ namespace Assets.Scripts.Activitys
 
         public override void OnBackPressed()
         {
-            startTransitionAnim(ActivitesID.GetId(typeof(MenuActivity)));
+            startTransitionAnim(ActivitesID.GetId(typeof(OptionsActivity)));
         }
 
         private void startTransitionAnim(int sceneId)
         {
-            m_TransitionAnim.StartingEnd.AddListener(delegate { StartCoroutine(loadNextActivity(sceneId)); });
+            m_TransitionAnim.StartingEnd.AddListener(delegate { GetActivityManager.LoadActivity(sceneId); });
             m_TransitionAnim.setSpeed(m_WaitingTransition);
             m_TransitionAnim.startTransition();
-        }
-
-        private IEnumerator loadNextActivity(int sceneId)
-        {
-            Screen.orientation = ScreenOrientation.Portrait;
-
-            yield return new WaitForSeconds(m_WaitingTransition / 2f);
-
-            GetActivityManager.LoadActivity(sceneId);
         }
 
         public override void pauseActivity()

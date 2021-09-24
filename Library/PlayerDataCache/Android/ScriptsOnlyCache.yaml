@@ -2,17 +2,21 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - Assets.Scripts.Activitys.MultiGameActivity
+    - Assets.Scripts.Activitys.OptionsActivity
     - Assets.Scripts.CheckerButtonEnable
     - Assets.Scripts.GameBoard
+    - Assets.Scripts.GameOptions
     - Assets.Scripts.MainClass
     - Assets.Scripts.MenuActivity
     - Assets.Scripts.MyCustomEventTrigger
     - Assets.Scripts.PauseMenu
     - Assets.Scripts.Players.DirectoryBoard
+    - Assets.Scripts.Resource.Resources
     - Assets.Scripts.SwipeView
     - Assets.Scripts.Test
     - Assets.Scripts.Transition
     - Assets.Scripts.TranslateAnimation
+    - Assets.Scripts.UI.NumberPicker
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
     - UnityEditor.Tilemaps.GridPaletteBrushes
@@ -76,12 +80,18 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10926}
     - Class: 114
+      Script: {instanceID: 11182}
+    - Class: 114
       Script: {instanceID: 11352}
+    - Class: 114
+      Script: {instanceID: 13796}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
       Script: {instanceID: 0}
     - Class: 157
+      Script: {instanceID: 0}
+    - Class: 213
       Script: {instanceID: 0}
     Assets/Scenes/Menu.unity:
     - Class: 1
@@ -197,6 +207,69 @@ ScriptsOnlyBuild:
       Script: {instanceID: 11524}
     - Class: 114
       Script: {instanceID: 11558}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 221
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    - Class: 225
+      Script: {instanceID: 0}
+    Assets/Scenes/Options.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 9698}
+    - Class: 114
+      Script: {instanceID: 9904}
+    - Class: 114
+      Script: {instanceID: 10318}
+    - Class: 114
+      Script: {instanceID: 10690}
+    - Class: 114
+      Script: {instanceID: 10912}
+    - Class: 114
+      Script: {instanceID: 11092}
+    - Class: 114
+      Script: {instanceID: 11112}
+    - Class: 114
+      Script: {instanceID: 11178}
+    - Class: 114
+      Script: {instanceID: 11558}
+    - Class: 114
+      Script: {instanceID: 41954}
+    - Class: 114
+      Script: {instanceID: 42152}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -619,6 +692,12 @@ ScriptsOnlyBuild:
     className: GraphicRaycaster
   - hash:
       serializedVersion: 2
+      Hash: 17d6dc98bb3264f841da2c39bdab6c45
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: Assets.Scripts
+    className: GameOptions
+  - hash:
+      serializedVersion: 2
       Hash: 88cc9df3c6fc697bfbeacd24c0d6f2d7
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools
@@ -749,10 +828,29 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 04c80c2815d90eeb7ccc3174fb743d90
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: Assets.Scripts.Resource
+    className: Resources
+  - hash:
+      serializedVersion: 2
+      Hash: e56000d9debcbc569b5a6e804c6119a5
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: Assets.Scripts.UI
+    className: NumberPicker
+  - hash:
+      serializedVersion: 2
+      Hash: 63c0f26e478f1d2bbad7e05faa5f5166
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: Assets.Scripts.Activitys
+    className: OptionsActivity
   platform: 13
   scenePathNames:
   - Assets/Scenes/Main.unity
   - Assets/Scenes/Menu.unity
   - Assets/Scenes/SingleGame.unity
   - Assets/Scenes/MultiGame.unity
+  - Assets/Scenes/Options.unity
   playerPath: D:/Unity Projects/BattleOfColors/TestBattleOfColors.apk

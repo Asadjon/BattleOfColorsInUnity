@@ -1,16 +1,14 @@
-﻿using Assets.Scripts.Interface;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static Assets.Scripts.ViewResources;
 using static Assets.Scripts.GameOptions;
 using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Assets.Scripts
 {
     [RequireComponent(typeof(TranslateAnimation))]
-    class SwipeView : MonoBehaviour, IOnChangeResources, AnimationListener
+    class SwipeView : MonoBehaviour, AnimationListener
     {
         [SerializeField]
         private TextMeshProUGUI textView = null;
@@ -24,7 +22,28 @@ namespace Assets.Scripts
 
 
         private ViewResources m_Resources = new ViewResources();
-        public ViewResources Resources { get => m_Resources; set { m_Resources.set(value.Id, value.Text, value.Color, value.Image); } }
+        public ViewResources Resources { get => m_Resources; 
+            set 
+            { 
+                m_Resources = value;
+
+                if (textView != null)
+                {
+                    textView.text = Resources.Text;
+                    textView.enabled = Resources.Text != null && Resources.Text != "";
+                }
+
+                if (imageView != null)
+                {
+                    imageView.sprite = Resources.Image;
+                    imageView.enabled = Resources.Image != null;
+                }
+
+                if (colorView != null && Resources.Color != null)
+                    colorView.color = Resources.Color;
+
+            }
+        }
 
         public Vector2 positionInTheArray { get; set; } = new Vector2();
 
@@ -46,8 +65,15 @@ namespace Assets.Scripts
 
         private void Awake()
         {
-            if (Resources != null)
-                Resources.set(textView.text, colorView.color, imageView.sprite);
+            Resources = new ViewResources();
+
+            swipingLimits = new Vector4()
+            {
+                x = -Instance.swipeLimitRect / 2,
+                y = -Instance.swipeLimitRect / 2,
+                z = Instance.swipeLimitRect / 2,
+                w = Instance.swipeLimitRect / 2,
+            };
 
             EventTrigger eventTrigger = GetComponent<EventTrigger>();
 
@@ -70,30 +96,7 @@ namespace Assets.Scripts
                 eventTrigger.triggers.Add(move);
             }
             Animation = GetComponent<TranslateAnimation>();
-            Animation.animationListener.Add(this);
-        }
-
-        private void Start()
-        {
-        }
-
-        public SwipeView()
-        {
-            Resources = new ViewResources();
-            Resources.onChangeResources = this;
-
-            swipingLimits = new Vector4()
-            {
-                x = -SWIPE_LIMIT_RECT / 2,
-                y = -SWIPE_LIMIT_RECT / 2,
-                z = SWIPE_LIMIT_RECT / 2,
-                w = SWIPE_LIMIT_RECT / 2,
-            };
-        }
-
-        public SwipeView(ViewResources resources)
-        {
-            Resources = new ViewResources(resources.Text, resources.Color, resources.Image, this);
+            if(Animation != null) Animation.animationListener.Add(this);
         }
 
         private void moving(SwipeDirection direction)
@@ -121,13 +124,13 @@ namespace Assets.Scripts
 
         public void startTranslateAnimation(float toXDelta, float toYDelta)
         {
-            Animation.Set(0f, 0f, toXDelta, toYDelta * -1, SWIPING_SPEED).start();
+            Animation.Set(0f, 0f, toXDelta, toYDelta * -1, Instance.swipingSpeed).start();
             isMoving = false;
         }
 
         public void startTranslateAnimation(Vector2 toDelta)
         {
-            Animation.Set(0f, 0f, toDelta.x, toDelta.y * -1, SWIPING_SPEED).start();
+            Animation.Set(0f, 0f, toDelta.x, toDelta.y * -1, Instance.swipingSpeed).start();
             isMoving = false;
         }
 
@@ -135,40 +138,6 @@ namespace Assets.Scripts
         {
             Animation.Set(0f, 0f, toXDelta, toYDelta * -1, delay).start();
             isMoving = false;
-        }
-
-        public void OnChangeResource(ChangedType type)
-        {
-            switch (type)
-            {
-                case ChangedType.Text:
-                    {
-                        if (Resources.Text == null || Resources.Text == "")
-                            textView.enabled = false;
-                        else
-                        {
-                            textView.enabled = true;
-                            textView.text = Resources.Text;
-                        }
-                    }
-                    break;
-                case ChangedType.Color:
-                    {
-                        if(Resources.Color != null)
-                            colorView.color = Resources.Color;
-                    }
-                    break;
-                case ChangedType.Image:
-                    {
-                        if (Resources.Image == null) imageView.enabled = false;
-                        else
-                        {
-                            imageView.enabled = true;
-                            imageView.sprite = Resources.Image;
-                        }
-                    }
-                    break;
-            }
         }
 
         private void OnTouchDown(Vector2 position)
