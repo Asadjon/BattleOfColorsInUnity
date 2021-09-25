@@ -10,40 +10,19 @@ namespace Assets.Scripts
     [RequireComponent(typeof(TranslateAnimation))]
     class SwipeView : MonoBehaviour, AnimationListener
     {
+        #region Views
         [SerializeField]
-        private TextMeshProUGUI textView = null;
-
-        [SerializeField]
-        private Image imageView = null;
+        private TextMeshProUGUI m_TextView = null;
 
         [SerializeField]
-        private Image colorView = null;
+        private Image m_ImageView = null;
 
+        [SerializeField]
+        private Image m_ColorView = null;
+        #endregion
 
-
+        #region Variables
         private ViewResources m_Resources = new ViewResources();
-        public ViewResources Resources { get => m_Resources; 
-            set 
-            { 
-                m_Resources = value;
-
-                if (textView != null)
-                {
-                    textView.text = Resources.Text;
-                    textView.enabled = Resources.Text != null && Resources.Text != "";
-                }
-
-                if (imageView != null)
-                {
-                    imageView.sprite = Resources.Image;
-                    imageView.enabled = Resources.Image != null;
-                }
-
-                if (colorView != null && Resources.Color != null)
-                    colorView.color = Resources.Color;
-
-            }
-        }
 
         public Vector2 positionInTheArray { get; set; } = new Vector2();
 
@@ -51,7 +30,7 @@ namespace Assets.Scripts
 
         private bool isOnTouchDown = false;
 
-        private bool isMoving { get; set; } = true;
+        private bool isMoving = true;
 
         private Vector2 touchingPosition;
 
@@ -61,9 +40,55 @@ namespace Assets.Scripts
 
         private SwipeDirection direction = SwipeDirection.NotSiwping;
 
-        public TranslateAnimation Animation { get; set; } = null;
+        private TranslateAnimation Animation = null;
 
-        private void Awake()
+        private bool m_IsShowText = true;
+        private bool m_IsShowColor = true;
+        private bool m_IsShowImage = false;
+        #endregion
+
+        #region Getter And Setters
+        public ViewResources Resources
+        {
+            get => m_Resources;
+            set
+            {
+                m_Resources = value;
+                updateUI();
+            }
+        }
+
+        public bool isShowText { get => m_IsShowText; 
+            set
+            {
+                m_IsShowText = value;
+                switchUIVisible();
+            }
+        }
+
+        public bool isShowColor { get => m_IsShowColor; 
+            set
+            {
+                m_IsShowColor = value;
+                switchUIVisible();
+            }
+        }
+
+        public bool isShowImage { get => m_IsShowImage; 
+            set
+            {
+                m_IsShowImage = value;
+                switchUIVisible();
+            }
+        }
+        #endregion
+
+
+        private void Awake() => loadData();
+
+        private void Start() => switchUIVisible();
+
+        private void loadData()
         {
             Resources = new ViewResources();
 
@@ -77,7 +102,7 @@ namespace Assets.Scripts
 
             EventTrigger eventTrigger = GetComponent<EventTrigger>();
 
-            if (eventTrigger != null)
+            if (eventTrigger)
             {
                 Entry down = new Entry();
                 down.eventID = EventTriggerType.PointerDown;
@@ -96,7 +121,7 @@ namespace Assets.Scripts
                 eventTrigger.triggers.Add(move);
             }
             Animation = GetComponent<TranslateAnimation>();
-            if(Animation != null) Animation.animationListener.Add(this);
+            if (Animation) Animation.animationListener.Add(this);
         }
 
         private void moving(SwipeDirection direction)
@@ -122,17 +147,8 @@ namespace Assets.Scripts
             positionInTheArray = new Vector2(emptyPosition.x, emptyPosition.y);
         }
 
-        public void startTranslateAnimation(float toXDelta, float toYDelta)
-        {
-            Animation.Set(0f, 0f, toXDelta, toYDelta * -1, Instance.swipingSpeed).start();
-            isMoving = false;
-        }
-
-        public void startTranslateAnimation(Vector2 toDelta)
-        {
-            Animation.Set(0f, 0f, toDelta.x, toDelta.y * -1, Instance.swipingSpeed).start();
-            isMoving = false;
-        }
+        public void startTranslateAnimation(float toXDelta, float toYDelta) 
+            => startTranslateAnimation(toXDelta, toYDelta, Instance.swipingSpeed);
 
         public void startTranslateAnimation(float toXDelta, float toYDelta, float delay)
         {
@@ -200,9 +216,30 @@ namespace Assets.Scripts
             }
         }
 
-        public void endAnim()
+        public void endAnim() => isMoving = true;
+
+        private void updateUI()
         {
-            isMoving = true;
+            if (m_TextView)
+                m_TextView.text = m_Resources.Text;
+
+            if (m_ImageView)
+                m_ImageView.sprite = m_Resources.Image;
+
+            if (m_ColorView && m_Resources.Color != null)
+                m_ColorView.color = m_Resources.Color;
+        }
+
+        private void switchUIVisible()
+        {
+            if(m_TextView)
+                m_TextView.enabled = m_IsShowText;
+
+            if (m_ColorView)
+                m_ColorView.enabled = m_IsShowColor;
+
+            if (m_ImageView)
+                m_ImageView.enabled = m_IsShowImage;
         }
 
         public interface IOnSwipe

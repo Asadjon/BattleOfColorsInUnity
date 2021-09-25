@@ -124,6 +124,9 @@ namespace Assets.Scripts
             viewTransform.sizeDelta = new Vector2(0f, 0f);
 
             view.Resources = viewResources[(int)pos.x];
+            view.isShowText = Instance.viewsShowText;
+            view.isShowColor = Instance.viewsShowColor;
+            view.isShowImage = Instance.viewsShowImage;
             view.onSwipe = this;
             view.positionInTheArray = pos;
         }
@@ -219,6 +222,8 @@ namespace Assets.Scripts
 
         protected void toWin()
         {
+            pauseGame();
+
             if (gameOver != null)
                 gameOver.gameOver(playerName);
         }
@@ -303,9 +308,7 @@ namespace Assets.Scripts
         public void startGame()
         {
             if (!permissionToSwipe)
-            {
                 start();
-            }
         }
 
         protected void start()

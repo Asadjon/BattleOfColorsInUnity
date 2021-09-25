@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -28,7 +23,7 @@ namespace Assets.Scripts.UI
 
         [SerializeField]
         private int value = 1;
-        public int Value { get => value; set { this.value = value; changeText(); } }
+        public int Value { get => value; set { this.value = value; updateUI(); } }
 
         [SerializeField]
         private bool arround = false;
@@ -38,9 +33,11 @@ namespace Assets.Scripts.UI
 
         private void Awake()
         {
-            m_leftArrow.onClick.AddListener(leftArrowClick);
-            m_rightArrow.onClick.AddListener(rightArrowClick);
-            m_targetText.text = value.ToString();
+            if(m_leftArrow)
+                m_leftArrow.onClick.AddListener(leftArrowClick);
+            if (m_rightArrow)
+                m_rightArrow.onClick.AddListener(rightArrowClick);
+            updateUI();
         }
 
         public void leftArrowClick()
@@ -55,35 +52,47 @@ namespace Assets.Scripts.UI
 
         private void add()
         {
-            if (value < max)
+            if (Value < max)
             {
-                value++;
-                changeText();
+                Value++;
             } 
             else if(arround) 
             {
-                value = min;
-                changeText();
+                Value = min;
             }
         }
 
         private void subtract()
         {
-            if (value > min)
+            if (Value > min)
             {
-                value--;
-                changeText();
+                Value--;
             }
             else if (arround)
             {
-                value = max;
-                changeText();
+                Value = max;
             }
         }
 
-        private void changeText()
+        private void updateUI()
         {
-            m_targetText.text = value.ToString();
+            if(m_targetText)
+                m_targetText.text = Value.ToString();
+
+            if (Value >= max && !arround)
+            {
+                m_rightArrow.interactable = false;
+            }
+            else if(Value <= min && !arround)
+            {
+                m_leftArrow.interactable = false;
+            }
+            else if (!arround)
+            {
+                m_rightArrow.interactable = true;
+                m_leftArrow.interactable = true;
+            }
+
             onChangeValue.Invoke();
         }
     }

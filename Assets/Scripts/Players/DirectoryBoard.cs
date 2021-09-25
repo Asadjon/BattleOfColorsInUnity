@@ -94,6 +94,9 @@ namespace Assets.Scripts.Players
 
             view.Resources = viewResources[(int)pos.x];
             view.positionInTheArray = pos;
+            view.isShowText = Instance.viewsShowText;
+            view.isShowColor = Instance.viewsShowColor;
+            view.isShowImage = Instance.viewsShowImage;
         }
 
         private void shuffle()

@@ -69,20 +69,19 @@ namespace Assets.Scripts
             startTransitionAnim();
         }
 
-        private void startTransitionAnim()
+        public void OnPointer(Button button, Pointer pointer)
         {
-            m_TransitionAnim.StartingEnd.AddListener(delegate { StartCoroutine(loadNextActivity(m_NextSceneIndex)); });
-            m_TransitionAnim.setSpeed(m_WaitingTransition);
-            m_TransitionAnim.startTransition();
+            if (pointer == Pointer.Down)
+                AudioManager.GetAudioManager.play(m_ClickSound);
         }
 
-        private IEnumerator loadNextActivity(int sceneId)
+
+        #region Activites actions
+        private void startTransitionAnim()
         {
-            Screen.orientation = ScreenOrientation.Landscape;
-
-            yield return new WaitForSeconds(m_WaitingTransition / 2f);
-
-            GetActivityManager.LoadActivity(sceneId);
+            m_TransitionAnim.StartingEnd.AddListener(delegate { GetActivityManager.LoadActivity(m_NextSceneIndex); });
+            m_TransitionAnim.setSpeed(m_WaitingTransition);
+            m_TransitionAnim.startTransition();
         }
 
         public override void pauseActivity()
@@ -94,11 +93,6 @@ namespace Assets.Scripts
         {
             Application.Quit();
         }
-
-        public void OnPointer(Button button, Pointer pointer)
-        {
-            if(pointer == Pointer.Down)
-                AudioManager.GetAudioManager.play(m_ClickSound);
-        }
+        #endregion
     }
 }

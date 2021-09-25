@@ -47,9 +47,11 @@ namespace Assets.Scripts
 
         public long timeForTheGame { get; } = 10000;    
 
-        public bool viewsShowText = false;
+        public bool viewsShowText = true;
 
-        public bool viewsShowImage = true;
+        public bool viewsShowColor = true;
+
+        public bool viewsShowImage = false;
 
         [Range(1, 8)]
         public int distanceOfSwiping = 8;

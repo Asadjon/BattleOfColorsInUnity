@@ -158,7 +158,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 175942657}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 108.53707, y: 326.56726, z: -343.625}
+  m_LocalPosition: {x: 0, y: 0, z: -3403.625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -201,7 +201,8 @@ MonoBehaviour:
   shuffleAnimDuration: 0.2
   smartSpeed: 1000
   viewsShowText: 1
-  viewsShowImage: 1
+  viewsShowColor: 1
+  viewsShowImage: 0
   distanceOfSwiping: 8
   collactionOfResource:
   - {fileID: 11400000, guid: 45b393db73d37404c85f62eae192d559, type: 2}
@@ -216,7 +217,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330183423}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 894.05896, y: 525.79095, z: -1604.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

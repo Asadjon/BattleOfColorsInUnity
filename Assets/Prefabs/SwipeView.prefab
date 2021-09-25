@@ -25,17 +25,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6608888971554246680}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6608888971874553720}
-  m_RootOrder: 0
+  m_Father: {fileID: 6608888971687897312}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -24.49, y: -24.49}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6608888971554246687
 CanvasRenderer:
@@ -185,7 +185,9 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 6608888971874553720}
   - {fileID: 6608888972063997089}
+  - {fileID: 6608888971554246681}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -231,9 +233,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b06b80c355e862744aa04fbc370f5f68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textView: {fileID: 6608888971554246686}
-  imageView: {fileID: 6608888972063997094}
-  colorView: {fileID: 0}
+  m_TextView: {fileID: 6608888971554246686}
+  m_ImageView: {fileID: 6608888972063997094}
+  m_ColorView: {fileID: 6608888971874553721}
 --- !u!1 &6608888971874553723
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,7 +248,7 @@ GameObject:
   - component: {fileID: 6608888971874553726}
   - component: {fileID: 6608888971874553721}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ColorCiew
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -262,15 +264,14 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 6608888971554246681}
-  m_Father: {fileID: 6608888972063997089}
+  m_Children: []
+  m_Father: {fileID: 6608888971687897312}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -18.49, y: -18.49}
+  m_SizeDelta: {x: -6, y: -6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6608888971874553726
 CanvasRenderer:
@@ -293,13 +294,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.43756366, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -307,7 +308,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 3
 --- !u!1 &6608888972063997088
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +321,7 @@ GameObject:
   - component: {fileID: 6608888972063997095}
   - component: {fileID: 6608888972063997094}
   m_Layer: 5
-  m_Name: Color
+  m_Name: ImageView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -336,10 +337,9 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 6608888971874553720}
+  m_Children: []
   m_Father: {fileID: 6608888971687897312}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

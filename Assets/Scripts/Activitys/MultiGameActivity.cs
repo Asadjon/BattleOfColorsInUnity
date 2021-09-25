@@ -35,8 +35,6 @@ namespace Assets.Scripts.Activitys
         [SerializeField]
         private AudioClip m_PauseBtnSound = null;
 
-        private bool isRestarting = false;
-
         private void Start()
         {
             loadData();
@@ -56,6 +54,8 @@ namespace Assets.Scripts.Activitys
             m_Player2.gameOver = this;
             m_Player2.PlayerName = "Player2";
 
+            shuffle();
+
             m_PauseMenu.m_PauseActions = this;
             m_PauseMenu.PauseGame = false;
             m_PauseMenu.StartGame();
@@ -63,21 +63,8 @@ namespace Assets.Scripts.Activitys
 
         public void startGame()
         {
-            if (isRestarting)
-            {
-                isRestarting = false;
-
-                m_Player1.startGame();
-                m_Player2.startGame();
-            }
-            else
-            {
-                m_Directory1.startShuffle();
-                m_Directory2.startShuffle();
-
-                m_Player1.startGame(m_Directory1.viewResources);
-                m_Player2.startGame(m_Directory2.viewResources);
-            }
+            m_Player1.startGame();
+            m_Player2.startGame();
 
             print("StartGame");
         }
@@ -113,16 +100,7 @@ namespace Assets.Scripts.Activitys
 
         public void restartGame()
         {
-            m_Directory1.startShuffle();
-            m_Directory2.startShuffle();
-
-            m_Player1.Resources = m_Directory1.viewResources;
-            m_Player1.returnToStartingPosition();
-
-            m_Player2.Resources = m_Directory2.viewResources;
-            m_Player2.returnToStartingPosition();
-
-            isRestarting = true;
+            shuffle();
         }
 
         public void nextGame() { }
@@ -137,21 +115,16 @@ namespace Assets.Scripts.Activitys
             startGame();
         }
 
-        public override void OnBackPressed()
+        private void shuffle()
         {
-            startTransitionAnim(ActivitesID.GetId(typeof(OptionsActivity)));
-        }
+            m_Directory1.startShuffle();
+            m_Directory2.startShuffle();
 
-        private void startTransitionAnim(int sceneId)
-        {
-            m_TransitionAnim.StartingEnd.AddListener(delegate { GetActivityManager.LoadActivity(sceneId); });
-            m_TransitionAnim.setSpeed(m_WaitingTransition);
-            m_TransitionAnim.startTransition();
-        }
+            m_Player1.Resources = m_Directory1.viewResources;
+            m_Player1.returnToStartingPosition();
 
-        public override void pauseActivity()
-        {
-            finish();
+            m_Player2.Resources = m_Directory2.viewResources;
+            m_Player2.returnToStartingPosition();
         }
 
         private void playPauseBtnSound()
@@ -159,5 +132,31 @@ namespace Assets.Scripts.Activitys
             if (m_PauseBtnSound != null)
                 GetAudioManager.play(m_PauseBtnSound);
         }
+
+
+        #region Activites actions
+        public override void OnBackPressed()
+            => startTransitionAnim(ActivitesID.GetId(typeof(OptionsActivity)));
+        private void startTransitionAnim(int sceneId)
+        {
+            m_TransitionAnim.StartingEnd.AddListener(delegate { StartCoroutine(loadNextActivitiy(sceneId)); });
+            m_TransitionAnim.setSpeed(m_WaitingTransition);
+            m_TransitionAnim.startTransition();
+        }
+
+        private IEnumerator loadNextActivitiy(int sceneId)
+        {
+            Screen.orientation = ScreenOrientation.Portrait;
+
+            yield return new WaitForSeconds(m_WaitingTransition);
+
+            GetActivityManager.LoadActivity(sceneId);
+        }
+
+        public override void pauseActivity()
+        {
+            finish();
+        }
+        #endregion
     }
 }
