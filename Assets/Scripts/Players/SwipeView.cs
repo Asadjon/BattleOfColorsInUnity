@@ -8,7 +8,8 @@ using static UnityEngine.EventSystems.EventTrigger;
 namespace Assets.Scripts
 {
     [RequireComponent(typeof(TranslateAnimation))]
-    class SwipeView : MonoBehaviour, AnimationListener
+    [RequireComponent(typeof(EventTrigger))]
+    public class SwipeView : MonoBehaviour
     {
         #region Views
         [SerializeField]
@@ -30,7 +31,7 @@ namespace Assets.Scripts
 
         private bool isOnTouchDown = false;
 
-        private bool isMoving = true;
+        public bool isMoving { get; set; } = true;
 
         private Vector2 touchingPosition;
 
@@ -45,6 +46,8 @@ namespace Assets.Scripts
         private bool m_IsShowText = true;
         private bool m_IsShowColor = true;
         private bool m_IsShowImage = false;
+
+        private bool isAnimStarting = false;
         #endregion
 
         #region Getter And Setters
@@ -110,7 +113,7 @@ namespace Assets.Scripts
 
                 Entry up = new Entry();
                 up.eventID = EventTriggerType.PointerUp;
-                up.callback.AddListener(data => OnTouchUp(((PointerEventData)data).position));
+                up.callback.AddListener(data => OnTouchUp());
 
                 Entry move = new Entry();
                 move.eventID = EventTriggerType.Drag;
@@ -120,8 +123,9 @@ namespace Assets.Scripts
                 eventTrigger.triggers.Add(up);
                 eventTrigger.triggers.Add(move);
             }
+
             Animation = GetComponent<TranslateAnimation>();
-            if (Animation) Animation.animationListener.Add(this);
+            if (Animation) Animation.endAnim.AddListener(endAnim);
         }
 
         private void moving(SwipeDirection direction)
@@ -152,8 +156,8 @@ namespace Assets.Scripts
 
         public void startTranslateAnimation(float toXDelta, float toYDelta, float delay)
         {
-            Animation.Set(0f, 0f, toXDelta, toYDelta * -1, delay).start();
-            isMoving = false;
+            Animation.Set(0f, 0f, toXDelta, -toYDelta, delay).start();
+            isAnimStarting = true;
         }
 
         private void OnTouchDown(Vector2 position)
@@ -162,19 +166,16 @@ namespace Assets.Scripts
             touchingPosition = position;
         }
 
-        private void OnTouchUp(Vector2 position)
+        private void OnTouchUp()
         {
             isOnTouchDown = false;
-            isMoving = true;
             direction = SwipeDirection.NotSiwping;
         }
 
         private void OnMove(Vector2 position)
         {
-            if (isOnTouchDown && isMoving)
-            {
+            if (isMoving && !isAnimStarting && isOnTouchDown)
                 CheckDirection(position);
-            }
         }
 
         private void CheckDirection(Vector2 position)
@@ -216,7 +217,7 @@ namespace Assets.Scripts
             }
         }
 
-        public void endAnim() => isMoving = true;
+        private void endAnim() => isAnimStarting = false;
 
         private void updateUI()
         {

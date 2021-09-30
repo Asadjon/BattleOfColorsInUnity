@@ -1,30 +1,34 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
+
 using static Assets.Scripts.GameOptions;
 using static Assets.Scripts.AudioManager;
+using Assets.Scripts.Players;
 
 namespace Assets.Scripts
 {
-     class GameBoard : MonoBehaviour, SwipeView.IOnSwipe
+    public class GameBoard : MonoBehaviour, SwipeView.IOnSwipe
     {
         public SwipeView m_OrginalSwipeView = null;
 
         [SerializeField]
-        protected string playerName = "Player";
-        public string PlayerName { get => playerName; set => playerName = value; }
-
-        [SerializeField]
-        protected int numberOfArrays = 0;
-        protected int totalNumberOfArrays = 0;
-
-        [SerializeField]
         private AudioClip m_PushSound = null;
 
-        public List<SwipeView> swipeViews { get; set; } = null;
-        protected List<ViewResources> viewResources = null;
+        public bool directoryBoardAvialable = false;
+
+        protected int numberOfArrays = defaultNumberOfArrays;
+        protected int totalNumberOfArrays = (int)Math.Pow(defaultNumberOfArrays, 2);
+
+        public UnityEvent gameOver = null;
+
+        public Player m_Player { get; set; } = null;
+
+        public List<SwipeView> swipeViews { get; set; } = new List<SwipeView>();
+
+        protected List<ViewResources> viewResources = new List<ViewResources>();
         public List<ViewResources> Resources
         {
             set
@@ -35,27 +39,23 @@ namespace Assets.Scripts
                 swipeViews.ForEach(view => view.Resources = viewResources[(i++) % numberOfArrays]);
             }
         }
-        protected List<Vector2> positionList;
-        private float anchorOfView;
-        public GameOver gameOver { private get; set; }
-        public bool permissionToSwipe { private get; set; } = false;
+
+        protected List<Vector2> positionList = new List<Vector2>();
+
+        private float anchorOfView = 0f;
+
+        private bool permissionToSwipe = false;
+        private bool PermissionToSwipe { get => permissionToSwipe;
+            set{
+                permissionToSwipe = value;
+                swipeViews.ForEach(view => view.isMoving = value);
+            }
+        }
+        public bool showImage { get; set; }
+        public bool showColor { get; set; }
+        public bool showText { get; set; }
 
         private Vector2 emptyPosition = new Vector2();
-
-        private void Awake()
-        {
-            loadData();
-        }
-
-        private void loadData()
-        {
-            swipeViews = new List<SwipeView>();
-            totalNumberOfArrays = (byte)Math.Pow(numberOfArrays, 2);
-            viewResources = new List<ViewResources>();
-            positionList = new List<Vector2>();
-
-            initPositions();
-        }
 
         private void initPositions()
         {
@@ -63,37 +63,19 @@ namespace Assets.Scripts
             for (byte i = 0; i < totalNumberOfArrays; i++)
                 positionList.Add(new Vector2(i % numberOfArrays, i / numberOfArrays));
 
-            emptyPosition = positionList[positionList.Count - 1];
+            emptyPosition = positionList.Count > 0 ? positionList[positionList.Count - 1] : Vector2.zero;
         }
 
-        public void setNumberOfArrays(int numberOfArrays, List<ViewResources> viewResources)
+        public void initialization(int numberOfArrays, List<ViewResources> resources)
         {
             this.numberOfArrays = numberOfArrays;
             totalNumberOfArrays = (int) Math.Pow(this.numberOfArrays, 2);
-            this.viewResources = viewResources;
+            viewResources = resources;
+            anchorOfView = 1f / numberOfArrays;
 
-            CalculateSize();
+            initPositions();
             initPositions();
             notifyViews();
-        }
-
-        private void CalculateSize()
-        {
-            // Change of parent size
-            RectTransform trans = GetComponent<RectTransform>();
-            Vector2 rectSize = trans.rect.size;
-
-            bool x_Equalse_Min = (rectSize.x - rectSize.y) < 0f;
-
-            float n1 = .5f - Mathf.Min(rectSize.x, rectSize.y) / (2 * Mathf.Max(rectSize.x, rectSize.y));
-            float n2 = n1 + Mathf.Min(rectSize.x, rectSize.y) / Mathf.Max(rectSize.x, rectSize.y);
-
-            trans.anchorMin = (x_Equalse_Min ? Vector2.up : Vector2.right) * n1;
-            trans.anchorMax = (x_Equalse_Min ? Vector2.up : Vector2.right) * n2 + (x_Equalse_Min ? Vector2.right : Vector2.up);
-            trans.sizeDelta = Vector2.zero;
-
-            // Calculate of SwipeView size
-            anchorOfView = 1f / numberOfArrays;
         }
 
         private void initViews()
@@ -124,16 +106,16 @@ namespace Assets.Scripts
             viewTransform.sizeDelta = new Vector2(0f, 0f);
 
             view.Resources = viewResources[(int)pos.x];
-            view.isShowText = Instance.viewsShowText;
-            view.isShowColor = Instance.viewsShowColor;
-            view.isShowImage = Instance.viewsShowImage;
+            view.isShowText = showText;
+            view.isShowColor = showColor;
+            view.isShowImage = showImage;
             view.onSwipe = this;
             view.positionInTheArray = pos;
         }
 
         public bool onSwipeLeft(Vector2 position)
         {
-            if (permissionToSwipe &&
+            if (PermissionToSwipe &&
                     position.y == emptyPosition.y &&
                     position.x != 0 &&
                     (emptyPosition.x + Instance.distanceOfSwiping) >= position.x)
@@ -152,7 +134,7 @@ namespace Assets.Scripts
 
         public bool onSwipeRight(Vector2 position)
         {
-            if (permissionToSwipe &&
+            if (PermissionToSwipe &&
                     position.y == emptyPosition.y &&
                     position.x != (numberOfArrays - 1) &&
                     (emptyPosition.x - Instance.distanceOfSwiping) <= position.x)
@@ -171,7 +153,7 @@ namespace Assets.Scripts
 
         public bool onSwipeTop(Vector2 position)
         {
-            if (permissionToSwipe &&
+            if (PermissionToSwipe &&
                     position.x == emptyPosition.x &&
                     position.y != 0 &&
                     (emptyPosition.y + Instance.distanceOfSwiping) >= position.y)
@@ -190,7 +172,7 @@ namespace Assets.Scripts
 
         public bool onSwipeBottom(Vector2 position)
         {
-            if (permissionToSwipe &&
+            if (PermissionToSwipe &&
                     position.x == emptyPosition.x &&
                     position.y != (numberOfArrays - 1) &&
                     (emptyPosition.y - Instance.distanceOfSwiping) <= position.y)
@@ -220,13 +202,7 @@ namespace Assets.Scripts
             }
         }
 
-        protected void toWin()
-        {
-            pauseGame();
-
-            if (gameOver != null)
-                gameOver.gameOver(playerName);
-        }
+        protected void toWin() => gameOver.Invoke();
 
         protected bool checkTheWin()
         {
@@ -235,10 +211,9 @@ namespace Assets.Scripts
                 Vector2 pos = new Vector2(i % numberOfArrays, i / numberOfArrays);
 
                 SwipeView swipeView = getSwipeView(pos);
-                if (swipeView == null) return false;
-                ViewResources viewResource = swipeView.Resources;
+                if (!swipeView) return false;
 
-                if (!viewResource.Equals(viewResources[i % numberOfArrays]))
+                if (!swipeView.Resources.Equals(viewResources[(int) pos.x]))
                     return false;
             }
             return true;
@@ -251,12 +226,12 @@ namespace Assets.Scripts
             for (var i = positionList.Count - 1; i > 0; i--)
             {
                 var randomIndex = UnityEngine.Random.Range(0, i + 1);
-                Swap(positionList, i, randomIndex);
+                swap(positionList, i, randomIndex);
             }
             emptyPosition = positionList[positionList.Count - 1];
         }
 
-        private void Swap(List<Vector2> list, int indexA, int indexB)
+        private void swap(List<Vector2> list, int indexA, int indexB)
         {
             var temp = list[indexA];
             list[indexA] = list[indexB];
@@ -279,9 +254,9 @@ namespace Assets.Scripts
             }
         }
 
-        public void pauseGame() => permissionToSwipe = false;
+        public void pauseGame() => PermissionToSwipe = false;
 
-        public void playGame() => permissionToSwipe = true;
+        public void playGame() => PermissionToSwipe = true;
 
         public void returnToStartingPosition()
         {
@@ -298,18 +273,11 @@ namespace Assets.Scripts
 
         public void startGame(List<ViewResources> viewResources)
         {
-            if (!permissionToSwipe)
-            {
-                Resources = viewResources;
-                start();
-            }
+            Resources = viewResources;
+            start();
         }
 
-        public void startGame()
-        {
-            if (!permissionToSwipe)
-                start();
-        }
+        public void startGame() => start();
 
         protected void start()
         {
@@ -333,13 +301,8 @@ namespace Assets.Scripts
 
         private void playSound(AudioClip clip)
         {
-            if (clip != null)
+            if (clip)
                 GetAudioManager.play(clip);
-        }
-
-        public interface GameOver
-        {
-            void gameOver(string playerName);
         }
     }
 }

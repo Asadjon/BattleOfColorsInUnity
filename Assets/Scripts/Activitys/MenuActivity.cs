@@ -4,19 +4,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using static Assets.Scripts.ActivityManager;
+using static Assets.Scripts.AudioManager;
+using static UnityEngine.Screen;
 
 namespace Assets.Scripts
 {
-    class MenuActivity : Activity, IOnClickListener<Button>, IOnEventTrigger
+    class MenuActivity : Activity
     {
         private int m_NextSceneIndex = 0;
-
-        [SerializeField]
-        private Button
-            m_BtnSingle,
-            m_BtnMulti,
-            m_BtnOptions,
-            m_BtnExit;
 
         [SerializeField]
         private AudioClip m_ClickSound = null;
@@ -34,45 +29,18 @@ namespace Assets.Scripts
 
         private void loaadData()
         {
-            Screen.orientation = ScreenOrientation.Portrait;
-
-            m_BtnSingle.onClick.AddListener(delegate { OnClick(m_BtnSingle); });
-            m_BtnMulti.onClick.AddListener(delegate { OnClick(m_BtnMulti); });
-            m_BtnOptions.onClick.AddListener(delegate { OnClick(m_BtnOptions); });
-            m_BtnExit.onClick.AddListener(delegate { OnClick(m_BtnExit); });
-
-            m_BtnSingle.GetComponent<MyCustomEventTrigger>().onEvent = this;
-            m_BtnMulti.GetComponent<MyCustomEventTrigger>().onEvent = this;
-            m_BtnOptions.GetComponent<MyCustomEventTrigger>().onEvent = this;
-            m_BtnExit.GetComponent<MyCustomEventTrigger>().onEvent = this;
+            orientation = ScreenOrientation.Portrait;
         }
 
-        public void OnClick(Button button)
+        public void OnClick(int sceneIndex)
         {
-            if (button.Equals(m_BtnSingle))
-            {
-                m_NextSceneIndex = 2;
-
-            } else if (button.Equals(m_BtnMulti))
-            {
-                m_NextSceneIndex = ActivitesID.GetId(typeof(OptionsActivity));
-
-            } else if (button.Equals(m_BtnOptions))
-            {
-                m_NextSceneIndex = 2;
-
-            } else if (button.Equals(m_BtnExit))
-            {
-                OnBackPressed();
-                return;
-            }
+            m_NextSceneIndex = sceneIndex;
             startTransitionAnim();
         }
 
-        public void OnPointer(Button button, Pointer pointer)
+        public void OnPointer()
         {
-            if (pointer == Pointer.Down)
-                AudioManager.GetAudioManager.play(m_ClickSound);
+            if(m_ClickSound) GetAudioManager.play(m_ClickSound);
         }
 
 

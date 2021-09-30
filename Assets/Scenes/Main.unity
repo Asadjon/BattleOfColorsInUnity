@@ -196,7 +196,6 @@ MonoBehaviour:
   swipeLimitRect: 4
   swipingSpeed: 0.05
   numberOfArrays: 8
-  defaultNumberOfArrays: 3
   selectedResource: {fileID: 11400000, guid: 844ecadf5caa0474ab3cef444b4ad9d9, type: 2}
   shuffleAnimDuration: 0.2
   smartSpeed: 1000

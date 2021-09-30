@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.Scripts
 {
@@ -7,7 +8,7 @@ namespace Assets.Scripts
     {
         private RectTransform myView;
 
-        public List<AnimationListener> animationListener { get; set; } = new List<AnimationListener>();
+        public UnityEvent endAnim = null;
 
         private Vector2 fromDelta;
 
@@ -26,13 +27,13 @@ namespace Assets.Scripts
 
         private void Update()
         {
-            if (calc() && isRunning)
+            if (isRunning && calc)
                 invalidate();
             else if(isRunning)
                 cancelAnim();
         }
 
-        protected bool calc() => millisLeft++ < duration;
+        protected bool calc => millisLeft++ < duration;
 
         public TranslateAnimation Set(float fromXDelta, float fromYDelta, float toXDelta, float toYDelta, float second)
         {
@@ -59,8 +60,7 @@ namespace Assets.Scripts
         {
             millisLeft = 0;
             isRunning = false;
-            if (animationListener != null && animationListener.Count > 0)
-                    animationListener.ForEach(listener => listener.endAnim());
+            endAnim.Invoke();
         }
 
         private void invalidate()
@@ -74,10 +74,5 @@ namespace Assets.Scripts
             myView.anchorMin = newMin;
             myView.anchorMax = newMax;
         }
-    }
-
-    public interface AnimationListener
-    {
-        void endAnim();
     }
 }

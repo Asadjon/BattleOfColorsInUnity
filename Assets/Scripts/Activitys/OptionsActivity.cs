@@ -33,11 +33,16 @@ namespace Assets.Scripts.Activitys
         {
             if (m_NumberPicker)
             {
-                m_NumberPicker.Value = Instance.numberOfArrays;
+                List<string> disVal = new List<string>();
+                for (int i = Instance.minNumberOfArrays; i <= Instance.maxNumberOfArrays; i++)
+                    disVal.Add(i.ToString());
+
+                m_NumberPicker.DisplayedValues = disVal;
+                m_NumberPicker.DisplayedValue = Instance.numberOfArrays.ToString();
 
                 m_NumberPicker.onChangeValue.AddListener(delegate
                 {
-                    Instance.numberOfArrays = m_NumberPicker.Value;
+                    Instance.numberOfArrays = Convert.ToInt16(m_NumberPicker.DisplayedValue);
                 });
             }
 

@@ -43,7 +43,7 @@ namespace Assets.Scripts
             set
             {
                 m_GameOver = value;
-                if (m_ResumeBtn != null) m_ResumeBtn.enabled = !m_GameOver;
+                if (m_ResumeBtn != null) m_ResumeBtn.interactable = !m_GameOver;
             }
         }
 

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7533071480224987489}
   - component: {fileID: 2944461596837214955}
   - component: {fileID: 8120761617605830252}
-  - component: {fileID: 5651463027401528293}
   m_Layer: 5
   m_Name: PauseMenuButton
   m_TagString: Untagged
@@ -65,7 +64,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 42afdee27585fff4a9ebbea738351229, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9727c57c570a8c145952453e189dc50f, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -118,17 +117,3 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5651463027401528293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7430279374904799222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7df0c42b64e954a4098dcdaff524c640, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EnableImage: {fileID: 0}
-  m_DissableImage: {fileID: 0}

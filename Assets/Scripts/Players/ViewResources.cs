@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Interface;
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -7,15 +6,15 @@ namespace Assets.Scripts
     [Serializable]
     public class ViewResources
     {
-        public int Id;
+        public int Id = 0;
 
-        public string Text;
+        public string Text = "";
 
-        public Color Color;
+        public Color Color = Color.white;
 
-        public Sprite Image;
+        public Sprite Image = null;
 
-        public ViewResources() => set(0, "0", Color.white, null);
+        public ViewResources() { }
 
         public ViewResources(string text, Color color, Sprite image) => set(text, color, image);
 
@@ -30,17 +29,11 @@ namespace Assets.Scripts
             Color = color;
             Image = image;
 
-            return this;
+            return set(text, color, image);
         }
 
         public ViewResources set(string text, Color color, Sprite image)
-        {
-            Text = text;
-            Color = color;
-            Image = image;
-
-            return this;
-        }
+            => set(Id, text, color, image);
 
         public override bool Equals(object obj)
         {

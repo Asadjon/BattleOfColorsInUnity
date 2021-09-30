@@ -1,68 +1,34 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using static Assets.Scripts.GameOptions;
 
 namespace Assets.Scripts.Players
 {
-    class DirectoryBoard : MonoBehaviour
+    public class DirectoryBoard : MonoBehaviour
     {
         public SwipeView m_OrginalSwipeView = null;
 
-        private List<SwipeView> mWorkViews;
-        public List<ViewResources> viewResources { get; private set; }
-        private int numberOfArrays;
+        public Player m_Player { get; set; } = null;
 
-        public void setNumberOfArrays(int numberOfArrays, List<ViewResources> viewResources)
+        private List<SwipeView> mWorkViews = new List<SwipeView>();
+        public List<ViewResources> viewResources { get; private set; } = new List<ViewResources>();
+
+        private int numberOfArrays = defaultNumberOfArrays;
+
+        private float anchorOfView = 0f;
+
+        public bool showImage { get; set; }
+        public bool showColor { get; set; }
+        public bool showText { get; set; }
+
+        public void initialization(int numberOfArrays, List<ViewResources> resources)
         {
             this.numberOfArrays = numberOfArrays;
-            this.viewResources = viewResources;
-
-            CalculateSize();
+            viewResources = resources;
+            anchorOfView = 1f / numberOfArrays;
 
             notifyViews();
-        }
-
-        private bool showBitmaps, showTexts;
-        private float anchorOfView;
-
-        private void Awake()
-        {
-            loadData();
-        }
-        private void loadData()
-        {
-            mWorkViews = new List<SwipeView>();
-            viewResources = Instance.selectedResource.m_Resources;
-
-            numberOfArrays = Instance.numberOfArrays;
-            mWorkViews = new List<SwipeView>();
-
-            showBitmaps = Instance.viewsShowImage;
-            showTexts = Instance.viewsShowText;
-        }
-
-        private void CalculateSize()
-        {
-            // Change of parent size
-            RectTransform trans = GetComponent<RectTransform>();
-            Vector2 rectSize = trans.rect.size;
-
-            // Calculate of SwipeView size
-            float viewSize = rectSize.x  / numberOfArrays;
-
-            anchorOfView = Mathf.Min(rectSize.x, viewSize) / Mathf.Max(rectSize.x, viewSize);
-
-            float n1 = .5f - Mathf.Min(rectSize.y, viewSize) / (2 * Mathf.Max(rectSize.y, viewSize));
-            float n2 = n1 + Mathf.Min(rectSize.y, viewSize) / Mathf.Max(rectSize.y, viewSize);
-
-            trans.anchorMin = Vector2.up * n1;
-            trans.anchorMax = Vector2.up * n2 + Vector2.right;
-            trans.sizeDelta = Vector2.zero;
         }
 
         private void initViews()
@@ -94,9 +60,9 @@ namespace Assets.Scripts.Players
 
             view.Resources = viewResources[(int)pos.x];
             view.positionInTheArray = pos;
-            view.isShowText = Instance.viewsShowText;
-            view.isShowColor = Instance.viewsShowColor;
-            view.isShowImage = Instance.viewsShowImage;
+            view.isShowText = showText;
+            view.isShowColor = showColor;
+            view.isShowImage = showImage;
         }
 
         private void shuffle()
@@ -123,7 +89,7 @@ namespace Assets.Scripts.Players
             {
                 ViewResources resource = viewResources[i];
                  SwipeView view = mWorkViews.FirstOrDefault(v => v.Resources.Equals(resource));
-                float move = (i - view.positionInTheArray.x) * anchorOfView;
+                float move = (i - view.positionInTheArray.x) * 1f / numberOfArrays;
 
                 view.positionInTheArray = new Vector2(i, 0);
 

@@ -15,10 +15,7 @@ namespace Assets.Scripts
         private void Awake()
         {
             if (Instance == null)
-            {
-                init();
                 Instance = this;
-            }
             else
                 Debug.Log("More than on instance GameOptions found!");
         }
@@ -31,11 +28,11 @@ namespace Assets.Scripts
         [Range(2, 8)]
         public int numberOfArrays = 3;
 
-        public int defaultNumberOfArrays = 3;
+        public static int defaultNumberOfArrays = 3;
 
-        public byte minNumberOfArrays { get; } = 2;
+        public int minNumberOfArrays { get; } = 2;
 
-        public byte maxNumberOfArrays { get; } = 8;
+        public int maxNumberOfArrays { get; } = 8;
 
         public Resource.Resources selectedResource = null;
 
@@ -58,10 +55,6 @@ namespace Assets.Scripts
         public List<int> unit_of_time { get; } = new List<int> { 10, 45, 115, 250, 410, 720, 1130 };
 
         public List<Resource.Resources> collactionOfResource = null;
-
-        private void init()
-        {
-        }
 
     }
 }
